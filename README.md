@@ -69,41 +69,7 @@ Built with **React**, **Express**, and **MySQL** for a modern restaurant deliver
 
 ---
 
-## Architecture
 
-```mermaid
-flowchart TB
-    subgraph Client["Browser (React SPA)"]
-        Home[Home / Menu / Cart]
-        Checkout[Checkout]
-        Admin[Admin Dashboard]
-        Profile[Customer Profile]
-    end
-
-    subgraph API["Express API :5000"]
-        Auth[/api/auth]
-        Food[/api/food]
-        Orders[/api/orders]
-        Users[/api/users]
-        Payment[/api/payment]
-        Upload[/api/upload]
-    end
-
-    subgraph External["External Services"]
-        PayHere[PayHere Gateway]
-        Google[Google OAuth]
-    end
-
-    DB[(MySQL)]
-
-    Client -->|REST + JWT| API
-    API --> DB
-    Checkout --> PayHere
-    PayHere -->|Webhook| Payment
-    Auth --> Google
-```
-
----
 
 ## Prerequisites
 
