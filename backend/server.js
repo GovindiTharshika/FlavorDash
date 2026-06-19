@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const crypto = require('crypto');
+const path = require('path');
+const multer = require('multer');
 require('dotenv').config();
 
 const authRoutes = require('./routes/auth');
@@ -32,6 +34,29 @@ app.use('/api/auth', authRoutes);
 app.use('/api/food', foodRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/users', require('./routes/users'));
+
+// ─── Serve Uploaded Files ───────────────────────────────────────────────────
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// ─── Image Upload Endpoint ──────────────────────────────────────────────────
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, 'uploads/');
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+const upload = multer({ storage });
+
+app.post('/api/upload', upload.single('image'), (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ error: 'No image uploaded' });
+    }
+    const imageUrl = `http://localhost:${process.env.PORT || 5000}/uploads/${req.file.filename}`;
+    res.json({ imageUrl });
+});
 
 // ─── PayHere: Generate payment hash for frontend checkout ───────────────────
 // POST /api/payment/hash

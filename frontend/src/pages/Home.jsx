@@ -86,17 +86,22 @@ const Home = () => {
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-gutter">
                             {/* Categories */}
                             {[
-                                { icon: 'local_pizza', label: 'Pizza' },
-                                { icon: 'lunch_dining', label: 'Burgers' },
-                                { icon: 'cake', label: 'Desserts' },
-                                { icon: 'set_meal', label: 'Sushi' },
-                                { icon: 'nutrition', label: 'Healthy' },
-                                { icon: 'wine_bar', label: 'Drinks' },
+                                { image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80', label: 'Pizza' },
+                                { image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80', label: 'Burgers' },
+                                { image: 'https://images.unsplash.com/photo-1551024506-0bccd828d307?w=400&q=80', label: 'Desserts' },
+                                { image: 'https://images.unsplash.com/photo-1579871494447-9811cf80d66c?w=400&q=80', label: 'Sushi' },
+                                { image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=400&q=80', label: 'Healthy' },
+                                { image: 'https://images.unsplash.com/photo-1536935338788-846bb9981813?w=400&q=80', label: 'Drinks' },
                             ].map((cat, idx) => (
                                 <div key={idx} className="group cursor-pointer">
-                                    <div className="aspect-square rounded-3xl bg-surface-container flex flex-col items-center justify-center transition-all duration-300 group-hover:bg-primary-fixed group-hover:-translate-y-2">
-                                        <span className="material-symbols-outlined text-4xl text-primary mb-2" style={{ fontVariationSettings: "'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24" }}>{cat.icon}</span>
-                                        <span className="font-label-md text-label-md">{cat.label}</span>
+                                    <div className="aspect-square rounded-[32px] bg-white border border-outline-variant/30 shadow-[0_4px_20px_rgba(0,0,0,0.03)] flex flex-col items-center justify-center transition-all duration-500 hover:shadow-[0_20px_40px_rgba(255,107,0,0.1)] hover:border-primary/30 hover:-translate-y-2 relative overflow-hidden">
+                                        <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                                        <div className="absolute -right-8 -top-8 w-24 h-24 bg-primary/10 rounded-full blur-2xl group-hover:bg-primary/20 transition-all duration-500"></div>
+                                        
+                                        <div className="relative z-10 w-20 h-20 sm:w-24 sm:h-24 mb-3 sm:mb-4 rounded-full overflow-hidden shadow-md group-hover:scale-110 transition-transform duration-500 border-4 border-white group-hover:border-primary/20">
+                                            <img src={cat.image} alt={cat.label} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+                                        </div>
+                                        <span className="font-title-sm text-title-sm text-on-surface group-hover:text-primary transition-colors duration-500 relative z-10">{cat.label}</span>
                                     </div>
                                 </div>
                             ))}

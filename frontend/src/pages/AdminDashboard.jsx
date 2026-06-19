@@ -116,6 +116,7 @@ const AdminDashboard = () => {
     const [lastUpdated, setLastUpdated] = useState(null);
     const [isRefreshing, setIsRefreshing] = useState(false);
     const [isSyncing, setIsSyncing] = useState(false);
+    const [isUploading, setIsUploading] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(false);
     const pollRef = useRef(null);
 
@@ -227,6 +228,28 @@ const AdminDashboard = () => {
         } catch (err) {
             console.error('Error saving food item', err);
             toast.error(editingId ? 'Error updating food item' : 'Error adding food item');
+        }
+    };
+
+    const handleImageUpload = async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('image', file);
+
+        setIsUploading(true);
+        try {
+            const res = await api.post('/upload', formData, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
+            setImageUrl(res.data.imageUrl);
+            toast.success('Image uploaded successfully');
+        } catch (err) {
+            console.error('Image upload failed', err);
+            toast.error('Failed to upload image');
+        } finally {
+            setIsUploading(false);
         }
     };
 
@@ -566,7 +589,18 @@ const AdminDashboard = () => {
                     <input className="bg-surface-container-low border-none rounded-lg p-3 focus:ring-2 focus:ring-primary-container outline-none" placeholder="Category" value={category} onChange={e => setCategory(e.target.value)} required />
                     <input className="bg-surface-container-low border-none rounded-lg p-3 focus:ring-2 focus:ring-primary-container outline-none md:col-span-2" placeholder="Description" value={description} onChange={e => setDescription(e.target.value)} required />
                     <input className="bg-surface-container-low border-none rounded-lg p-3 focus:ring-2 focus:ring-primary-container outline-none" type="number" step="0.01" placeholder="Price (Rs.)" value={price} onChange={e => setPrice(e.target.value)} required />
-                    <input className="bg-surface-container-low border-none rounded-lg p-3 focus:ring-2 focus:ring-primary-container outline-none" placeholder="Image URL" value={imageUrl} onChange={e => setImageUrl(e.target.value)} required />
+                    
+                    <div className="md:col-span-2 flex flex-col sm:flex-row gap-2 bg-surface-container-low rounded-lg p-3">
+                        <input className="flex-1 bg-transparent border-none focus:ring-0 outline-none placeholder:text-on-surface-variant text-label-md" placeholder="Image URL (or upload an image ->)" value={imageUrl} onChange={e => setImageUrl(e.target.value)} required />
+                        <label className="flex items-center gap-2 cursor-pointer bg-surface-variant text-on-surface-variant px-4 py-2 rounded-lg font-label-sm hover:bg-surface-container-highest transition-colors whitespace-nowrap">
+                            <span className={`material-symbols-outlined text-[18px] ${isUploading ? 'animate-bounce' : ''}`}>
+                                {isUploading ? 'cloud_upload' : 'upload_file'}
+                            </span>
+                            {isUploading ? 'Uploading...' : 'Upload Image'}
+                            <input type="file" accept="image/*" className="hidden" onChange={handleImageUpload} disabled={isUploading} />
+                        </label>
+                    </div>
+
                     <input className="bg-surface-container-low border-none rounded-lg p-3 focus:ring-2 focus:ring-primary-container outline-none" type="number" min="0" placeholder="Stock quantity" value={stockQuantity} onChange={e => setStockQuantity(e.target.value)} required />
                     <input className="bg-surface-container-low border-none rounded-lg p-3 focus:ring-2 focus:ring-primary-container outline-none" type="number" min="0" placeholder="Low stock alert at" value={lowStockThreshold} onChange={e => setLowStockThreshold(e.target.value)} required />
                     <div className="md:col-span-2 flex gap-3">
