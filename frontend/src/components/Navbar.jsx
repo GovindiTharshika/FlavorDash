@@ -148,7 +148,11 @@ const Navbar = () => {
                             </button>
                         )}
                         <div className="flex items-center gap-2 sm:gap-4">
-                            <Link to="/cart" className="active:scale-95 transition-transform text-primary dark:text-primary-fixed-dim relative p-1">
+                            <Link
+                                to="/cart"
+                                className="active:scale-95 transition-transform text-primary dark:text-primary-fixed-dim relative p-1"
+                                aria-label="Shopping cart"
+                            >
                                 <span className="material-symbols-outlined text-[24px]">shopping_cart</span>
                                 {cartCount > 0 && (
                                     <span className="absolute -top-0.5 -right-0.5 bg-primary-container text-on-primary-container text-[10px] min-w-[16px] h-4 px-1 flex items-center justify-center rounded-full font-bold">
